@@ -1,46 +1,32 @@
-const Discord = require ("discord.js");
+const Discord = require("discord.js");
+const Enmap = require("enmap");
+const fs = require("fs");
+
 const client = new Discord.Client();
 const config = require("./config.json");
+// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
+client.config = config;
 
-client.on("ready", () => {
-  console.log ("I am ready!");
+fs.readdir("./events/", (err, files) => {
+if (err) return console.error(err);
+files.forEach(file => {
+  const event = require(`./events/${file}`);
+  let eventName = file.split(".")[0];
+  client.on(eventName, event.bind(null, client));
+});
 });
 
-client.on("message", message => {
-  if (message.author.bot) return;
-  if (message.content.indexOf(config.prefix) !== 0) return;
+client.commands = new Enmap();
 
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-  const tag = `<@${member.id}>`
+fs.readdir("./commands/", (err, files) => {
+if (err) return console.error(err);
+files.forEach(file => {
+  if (!file.endsWith(".js")) return;
+  let props = require(`./commands/${file}`);
+  let commandName = file.split(".")[0];
+  console.log(`Attempting to load command ${commandName}`);
+  client.commands.set(commandName, props);
+});
+});
 
-
-  if(command === 'ping') {
-    message.channel.send('Pong!');
-  } else
-  if (command === 'blah') {
-    message.channel.send('Meh.');
-  } else
-
-
-  if (command === 'kick '){
-
-    member.hasPermission ('ADMINISTRATOR')||
-    member.hasPermission ('KICK_MEMBERS')
-  {
-    const target = mentions.users.first()
-    if (target){
-      const targetMember = message.guild.members.cache.get(target.id)
-      targetMember.kick()
-      message.channel.send (`${tag} has been kicked.`)
-    } else
-    if {
-      message.channel.send(`${tag} please specify someone to kick.`)
-    }
-  }  else {
-    message.channel.send (
-      `${tag} You do not have permission to use this command.`
-    )
-  };
-};
 client.login(config.token);
