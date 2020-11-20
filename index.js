@@ -9,11 +9,8 @@ client.on("ready", () => {
 client.on("message", message => {
   if (message.author.bot) return;
   if (message.content.indexOf(config.prefix) !== 0) return;
-
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
-  const tag = `<@${member.id}>`
-
 
   if(command === 'ping') {
     message.channel.send('Pong!');
@@ -21,26 +18,19 @@ client.on("message", message => {
   if (command === 'blah') {
     message.channel.send('Meh.');
   } else
+  if(command === 'kick') {
+    let member = message.mentions.members.first();
+    member.kick();
+  } else
+  if (command === 'say'){
+    let text= args.join("");
+     message.delete();
+     message.channel.send(text);
+
+  }
 
 
-  if (command === 'kick '){
+});
 
-    member.hasPermission ('ADMINISTRATOR')||
-    member.hasPermission ('KICK_MEMBERS')
-  {
-    const target = mentions.users.first()
-    if (target){
-      const targetMember = message.guild.members.cache.get(target.id)
-      targetMember.kick()
-      message.channel.send (`${tag} has been kicked.`)
-    } else
-    if {
-      message.channel.send(`${tag} please specify someone to kick.`)
-    }
-  }  else {
-    message.channel.send (
-      `${tag} You do not have permission to use this command.`
-    )
-  };
-};
+
 client.login(config.token);
