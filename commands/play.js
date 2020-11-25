@@ -1,3 +1,4 @@
+exports.run =  async (client, message, args) => {
 const queue = new Map();
 async function execute(message, serverQueue) {
   const args = message.content.split(" ");
@@ -68,3 +69,4 @@ function play(guild, song) {
       .on("error", error => console.error(error));
   dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
   serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+};
