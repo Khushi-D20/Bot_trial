@@ -1,20 +1,24 @@
-exports.run = (client, message, [mention, ...reason]) => {
-  const modRole = message.guild.roles.cache.find(role => role.name === "Mods");
-  if (!modRole)
-    return console.log("The Mods role does not exist");
+exports.run =  (client, message, [mention, ...reason]) => {
 
-  if (!message.member.roles.cache.has(modRole.id))
-    return message.reply("You can't use this command.");
+  if(!message.member.hasPermission('ADMINISTRATOR'))
+    return message.reply("you can't use this command.");
+
+  if(!message.member.hasPermission('KICK_MEMBERS'))
+    return message.reply("you can't use this command.");
 
   if (message.mentions.members.size === 0)
-    return message.reply("Please mention a user to kick");
+    return message.reply("please mention a user to kick");
 
   if (!message.guild.me.hasPermission("KICK_MEMBERS"))
     return message.reply("");
 
   const kickMember = message.mentions.members.first();
+	const log = message.mentions.users.first().tag;
 
-  kickMember.kick(reason.join(" ")).then(member => {
-    message.reply(`${member.user.username} was succesfully kicked.`);
+
+  kickMember.kick({reason: reason.join(" ")}).then(member => {
+    message.reply(`${member.user.username} was kicked for reasons.`);
+
+
   });
 };
