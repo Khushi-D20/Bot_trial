@@ -1,13 +1,6 @@
 exports.run = async (client, message, args) => {
       const ydtl = require('ytdl-core')
-      const PREFIX = "dum dum"
 
-
-      if (message.author.bot) return
-      if (!message.content.startsWith(PREFIX)) return
-
-
-      if(message.content.startsWith(`${PREFIX}play`)){
         const voiceChannel = message.member.voice.channel
         if(!voiceChannel) return message.channel.send ("You need to join a voice channel first dummy.")
 
@@ -31,10 +24,4 @@ exports.run = async (client, message, args) => {
         })
         dispatcher.setVolumeLogarithmic(5 / 5)
 
-      } else if (message.content.startsWith(`${PREFIX}stop`)){
-        if(!message.member.voice.channel) return message.channel.send ("You need to be in the voice channel to stop the music")
-        message.member.voice.channel.leave()
-        return undefined
-      }
-
-};
+      } 
